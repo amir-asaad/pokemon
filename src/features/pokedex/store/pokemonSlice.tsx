@@ -26,12 +26,35 @@ interface OtherSpritesInterface {
   other: OfficialArtworkInterface
 }
 
+interface StatNameI {
+  name: string
+}
+
+export interface PokemonStatsI {
+  base_stat: number,
+  stat: StatNameI
+}
+
+interface PokemonAbilityNameI {
+  name: string,
+  url: string
+}
+
+interface PokemonAbilityI {
+  ability: PokemonAbilityNameI,
+  is_hidden: boolean
+}
+
 export interface PokemonDataInterface {
   name: string,
   order: number,
   sprites: OtherSpritesInterface,
   artwork: string
   types: PokemonTypesInterface[],
+  stats: PokemonStatsI[],
+  height: number,
+  weight: number,
+  abilities: PokemonAbilityI[]
 }
 
 export interface PokemonStateInterface {
@@ -39,7 +62,8 @@ export interface PokemonStateInterface {
   previous: string | null,
   results: PokemonResultInterface[],
   resultsData: PokemonDataInterface[],
-  numberToFetch: number[]
+  numberToFetch: number[],
+  viewPokemon: PokemonDataInterface
 };
 
 const initialState: PokemonStateInterface = {
@@ -47,7 +71,24 @@ const initialState: PokemonStateInterface = {
   previous: null,
   results: [],
   resultsData: [],
-  numberToFetch: [0, 19]
+  numberToFetch: [0, 19],
+  viewPokemon: {
+    name: '',
+    order: 0,
+    sprites:  {
+      other: {
+        "official-artwork": {
+          front_default: ''
+        }
+      }
+    },
+    artwork: '',
+    types: [],
+    stats: [],
+    height: 0,
+    weight: 0,
+    abilities: []
+  },
 };
 
 export const fetchPokemonList = createAsyncThunk<PokemonStateInterface, string, {state: RootState }>(
@@ -84,6 +125,10 @@ export const pokemonSlice = createSlice({
   name: 'pokemon',
   initialState,
   reducers: {
+    SET_VIEW_POKEMON: (state, action) => {
+      state.viewPokemon = action.payload;
+      // state.viewPokemon = payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPokemonList.fulfilled, (state, { payload }) => {
@@ -109,7 +154,11 @@ export const pokemonSlice = createSlice({
             }
           },
           artwork: val.sprites.other['official-artwork'].front_default,
-          types: val.types.map(({ type, slot }) => ({ type, slot }))
+          types: val.types.map(({ type, slot }) => ({ type, slot })),
+          stats: val.stats,
+          height: val.height,
+          weight: val.weight,
+          abilities: val.abilities
         }))
       ]
     })
@@ -119,5 +168,7 @@ export const pokemonSlice = createSlice({
     })
   }
 });
+
+export const { SET_VIEW_POKEMON } = pokemonSlice.actions;
 
 export default pokemonSlice.reducer;
