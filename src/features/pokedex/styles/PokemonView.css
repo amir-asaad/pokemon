@@ -1,0 +1,17 @@
+.main {
+  margin: 10% 20%;
+}
+
+.main__display {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.display__first-column {
+  flex-grow: 1;
+}
+
+.display__second-column {
+  flex-grow: 1;
+}

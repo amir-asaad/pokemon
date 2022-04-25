@@ -24,3 +24,13 @@ export const pokemonTypeColor = () => {
     { name: 'water', color: '#6890F0' }
   ]
 }
+
+export const addZeroes = (order: number): string => {
+  if (order < 10) {
+    return `00${order}`
+  } else if (order < 100) {
+    return `0${order}`
+  }
+
+  return `${order}`
+}

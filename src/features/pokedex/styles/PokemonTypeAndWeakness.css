@@ -1,0 +1,4 @@
+.pokemon-type {
+  display: flex;
+  gap: 10px;
+}

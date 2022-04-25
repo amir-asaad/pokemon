@@ -4,7 +4,7 @@ import { fetchPokemonData, fetchPokemonList } from '../store/pokemonSlice';
 import { Grid } from '@mui/material';
 import PokemonCard from './PokemonCard';
 import LoadMorePokemon from './LoadMoreButton';
-import './PokemonList.css';
+import '../styles/PokemonList.css';
 
 const PokemonList: React.FC = () => {
   const dispatch = useAppDispatch();
