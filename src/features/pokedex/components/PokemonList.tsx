@@ -30,8 +30,8 @@ const PokemonList: React.FC = () => {
           mx: 'auto',
           my: 2
         }}
-        xs={5}
-        sm={4}
+        xs={12}
+        sm={5}
         md={3}
       >
         <PokemonCard
