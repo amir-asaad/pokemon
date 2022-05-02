@@ -119,6 +119,14 @@ export const fetchPokemonData = createAsyncThunk<PokemonDataInterface[], void, {
       responses.map(response => response.json())
     )
   }
+);
+
+export const viewPokemonData = createAsyncThunk<PokemonDataInterface, string>(
+  'pokemon/viewPokemonData',
+  async (routeId: string) => {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${routeId}`)
+    return await response.json()
+  }
 )
 
 export const pokemonSlice = createSlice({
@@ -165,6 +173,27 @@ export const pokemonSlice = createSlice({
     builder.addCase(fetchPokemonData.rejected, (state, action) => {
     })
     builder.addCase(fetchPokemonData.pending, (state, action) => {
+    })
+    builder.addCase(viewPokemonData.fulfilled, (state, { payload }) => {
+      state.viewPokemon = {
+        name: capitalize(payload.name),
+        order: payload.order,
+        sprites: {
+          other: {
+            "official-artwork": {
+              front_default: payload.sprites.other['official-artwork'].front_default
+            }
+          }
+        },
+        artwork: payload.sprites.other['official-artwork'].front_default,
+        types: payload.types.map(({ type, slot }) => ({ type, slot })),
+        stats: payload.stats,
+        height: payload.height,
+        weight: payload.weight,
+        abilities: payload.abilities
+      }
+    })
+    builder.addCase(viewPokemonData.rejected, (state, action) => {
     })
   }
 });

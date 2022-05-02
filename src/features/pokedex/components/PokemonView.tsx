@@ -1,16 +1,28 @@
 import { Card, CardMedia, Typography } from '@mui/material';
-import React from 'react';
-import { useAppSelector } from '../../../hooks';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { addZeroes } from '../../../utils/helpers';
+import { useParams } from 'react-router-dom';
 
 import '../styles/PokemonView.css';
 import PokemonInfo from './PokemonInfo';
 import PokemonStats from './PokemonStats';
 import PokemonType from './PokemonType';
+import { viewPokemonData } from '../store/pokemonSlice'
 
 
 const PokemonView: React.FC = () => {
+  const dispatch = useAppDispatch();
   const viewPokemon = useAppSelector(state => state.pokemon.viewPokemon);
+  const params = useParams();
+
+  useEffect(() => {
+    if (viewPokemon.order < 1) {
+      const id = params.id ? params.id.toLowerCase() : ''
+      dispatch(viewPokemonData(id))
+    }
+    
+  }, [dispatch, viewPokemon, params]);
   
   return (
     <div className="main">
