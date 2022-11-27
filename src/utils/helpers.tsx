@@ -1,6 +1,6 @@
 export const capitalize = (text: string): string => {
-  return text.slice(0, 1).toUpperCase() + text.slice(1,)
-}
+  return text.slice(0, 1).toUpperCase() + text.slice(1);
+};
 
 export const pokemonTypeColor = () => {
   return [
@@ -22,15 +22,15 @@ export const pokemonTypeColor = () => {
     { name: 'rock', color: '#B8A038' },
     { name: 'steel', color: '#B8B8D0' },
     { name: 'water', color: '#6890F0' }
-  ]
-}
+  ];
+};
 
 export const addZeroes = (order: number): string => {
   if (order < 10) {
-    return `00${order}`
+    return `00${order}`;
   } else if (order < 100) {
-    return `0${order}`
+    return `0${order}`;
   }
 
-  return `${order}`
-}
+  return `${order}`;
+};

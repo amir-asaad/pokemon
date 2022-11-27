@@ -1,18 +1,15 @@
-import { Card, CardMedia, Typography } from "@mui/material";
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { addZeroes } from "../../../utils/helpers";
-import { useParams } from "react-router-dom";
+import { Card, CardMedia, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { addZeroes } from '../../../utils/helpers';
+import { useParams } from 'react-router-dom';
 
-import "../styles/PokemonView.css";
-import PokemonInfo from "./PokemonInfo";
-import PokemonStats from "./PokemonStats";
-import PokemonTypeOrWeakness from "./PokemonTypeOrWeakness";
+import '../styles/PokemonView.css';
+import PokemonInfo from './PokemonInfo';
+import PokemonStats from './PokemonStats';
+import PokemonTypeOrWeakness from './PokemonTypeOrWeakness';
 
-import {
-  viewPokemonData,
-  fetchPokemonWeaknessData,
-} from "../store/pokemonSlice";
+import { viewPokemonData } from '../store/pokemonSlice';
 
 const PokemonView: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +18,7 @@ const PokemonView: React.FC = () => {
 
   useEffect(() => {
     if (viewPokemon.order < 1) {
-      const id = params.id ? params.id.toLowerCase() : "";
+      const id = params.id ? params.id.toLowerCase() : '';
 
       dispatch(viewPokemonData(id));
     }
@@ -33,7 +30,7 @@ const PokemonView: React.FC = () => {
         align="center"
         variant="h4"
         sx={{
-          marginBottom: "5%",
+          marginBottom: '5%'
         }}
       >
         {viewPokemon.name} - #{addZeroes(viewPokemon.order)}
@@ -46,9 +43,9 @@ const PokemonView: React.FC = () => {
               image={viewPokemon.artwork}
               height="300"
               sx={{
-                backgroundColor: "#f0eded",
-                objectFit: "contain",
-                marginBottom: "50px",
+                backgroundColor: '#f0eded',
+                objectFit: 'contain',
+                marginBottom: '50px'
               }}
             />
           </Card>
@@ -57,7 +54,9 @@ const PokemonView: React.FC = () => {
         <div className="display__second-column">
           <PokemonInfo />
           {viewPokemon.order > 0 && <PokemonTypeOrWeakness name="Type" />}
-          {viewPokemon.order > 0 && <PokemonTypeOrWeakness name="Weakness" />}
+          {viewPokemon.order > 0 && (
+            <PokemonTypeOrWeakness name="Weakness" />
+          )}
         </div>
       </div>
     </div>

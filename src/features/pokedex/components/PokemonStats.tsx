@@ -5,20 +5,22 @@ import { PokemonStatsI } from '../store/pokemonSlice';
 import '../styles/PokemonStats.css';
 
 interface Props {
-  stats: PokemonStatsI[]
+  stats: PokemonStatsI[];
 }
 
 const PokemonStats: React.FC<Props> = ({ stats }) => {
   const listStat = (stat: string, base_stat: number) => {
-    const howManyToColor = parseInt(`${base_stat * 15 / 200}`, 10);
+    const howManyToColor = parseInt(`${(base_stat * 15) / 200}`, 10);
 
     return [...Array(15)].map((val, index) => {
       return (
         <li
           key={`${stat}-${index}`}
-          className={`value__list ${15 - howManyToColor <= index ? 'is-colored': 'is-not-colored'}`}
+          className={`value__list ${
+            15 - howManyToColor <= index ? 'is-colored' : 'is-not-colored'
+          }`}
         />
-      )
+      );
     });
   };
 
@@ -30,28 +32,20 @@ const PokemonStats: React.FC<Props> = ({ stats }) => {
       >
         <li style={{ listStyleType: 'none' }}>
           <ul className="stat-list__value">
-            { listStat(stat.name, base_stat) }
+            {listStat(stat.name, base_stat)}
           </ul>
-          <Typography
-            align="center"
-          >
-            {stat.name}
-          </Typography>
+          <Typography align="center">{stat.name}</Typography>
         </li>
       </ul>
-    ))
+    ));
   };
 
   return (
     <div className="main__stats">
-      <Typography sx={{ padding: '10px' }}>
-        Stats
-      </Typography>
-      <div className="stats-wrapper">
-        { mapStats() }
-      </div>
+      <Typography sx={{ padding: '10px' }}>Stats</Typography>
+      <div className="stats-wrapper">{mapStats()}</div>
     </div>
-  )
+  );
 };
 
 export default PokemonStats;

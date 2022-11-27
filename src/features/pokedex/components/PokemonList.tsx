@@ -8,10 +8,8 @@ import '../styles/PokemonList.css';
 
 const PokemonList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const {
-    results: pokemonList,
-    resultsData: pokemonData,
-  } = useAppSelector(state => state.pokemon);
+  const { results: pokemonList, resultsData: pokemonData } =
+    useAppSelector((state) => state.pokemon);
 
   useEffect(() => {
     dispatch(fetchPokemonList(''));
@@ -40,19 +38,17 @@ const PokemonList: React.FC = () => {
           types={val.types}
         />
       </Grid>
-    ))
-  }
+    ));
+  };
 
   return (
     <div>
-      <Grid container>
-        { pokemonCards() }
-      </Grid>
+      <Grid container>{pokemonCards()}</Grid>
       <div className="load-more__btn">
         <LoadMorePokemon />
       </div>
     </div>
-  )
+  );
 };
 
 export default PokemonList;
