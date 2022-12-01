@@ -6,6 +6,12 @@ import {
   TypeDataI
 } from '../interface/typeInterface';
 
+import {
+  EvolutionI,
+  SpeciesI,
+  ArrangedEvolutionI
+} from '../interface/evolutionInterface';
+
 interface PokemonResultInterface {
   name: string;
   url: string;
@@ -62,6 +68,7 @@ export interface PokemonDataInterface {
   weight: number;
   abilities: PokemonAbilityI[];
   weakness: DamageRelationsDataI[];
+  species: SpeciesI;
 }
 
 export interface PokemonStateInterface {
@@ -73,6 +80,11 @@ export interface PokemonStateInterface {
   viewPokemon: PokemonDataInterface;
   typeData: TypeDataI[];
   evolution: EvolutionI;
+  arrangedEvolution: [
+    number,
+    string,
+    PokemonDataInterface | undefined
+  ][][];
 }
 
 const initialState: PokemonStateInterface = {
@@ -110,9 +122,10 @@ const initialState: PokemonStateInterface = {
         name: '',
         url: ''
       },
-      evolvesTo: []
+      evolves_to: []
     }
-  }
+  },
+  arrangedEvolution: []
 };
 
 export const fetchPokemonList = createAsyncThunk<
@@ -153,8 +166,9 @@ export const viewPokemonData = createAsyncThunk<
   const response = await fetch(
     `https://pokeapi.co/api/v2/pokemon/${routeId}`
   );
+  const json: PokemonDataInterface = await response.json();
 
-  return await response.json();
+  return json;
 });
 
 export const fetchPokemonWeaknessData = createAsyncThunk<
@@ -180,6 +194,47 @@ export const fetchPokemonWeaknessData = createAsyncThunk<
   });
 
   return typeData;
+});
+
+export const fetchEvolutionChain = createAsyncThunk<
+  EvolutionI,
+  void,
+  { state: RootState }
+>('pokemon/fetchEvolutionChain', async (_, { getState }) => {
+  const { pokemon } = getState();
+
+  const resp = await fetch(pokemon.viewPokemon.species.url);
+  const json = await resp.json();
+
+  const evolutionResp = await fetch(json.evolution_chain.url);
+  const evolutionJson = await evolutionResp.json();
+
+  return evolutionJson;
+});
+
+export const fetchEvolutionDetails = createAsyncThunk<
+  { evolution: [number, string][][]; result: PokemonDataInterface[] },
+  [number, string][][],
+  { state: RootState }
+>('pokemon/fetchEvolutionDetails', async (evolution, { getState }) => {
+  const promises = await Promise.all(
+    evolution
+      .map((val) => {
+        return val.map((innerVal) => {
+          return fetch(`https://pokeapi.co/api/v2/pokemon/${innerVal[1]}`);
+        });
+      })
+      .flat()
+  );
+
+  const responses: PokemonDataInterface[] = await Promise.all(
+    promises.map((promise) => promise.json())
+  );
+
+  return {
+    evolution,
+    result: responses
+  };
 });
 
 export const pokemonSlice = createSlice({
@@ -220,7 +275,8 @@ export const pokemonSlice = createSlice({
           weight: val.weight,
           abilities: val.abilities,
           weakness: [],
-        })),
+          species: val.species
+        }))
       ];
     });
     builder.addCase(fetchPokemonData.rejected, (state, action) => {});
@@ -244,6 +300,7 @@ export const pokemonSlice = createSlice({
         weight: payload.weight,
         abilities: payload.abilities,
         weakness: [],
+        species: payload.species
       };
     });
     builder.addCase(viewPokemonData.rejected, (state, action) => {});
@@ -283,7 +340,47 @@ export const pokemonSlice = createSlice({
         });
       }
     );
-  },
+    builder.addCase(
+      fetchEvolutionChain.fulfilled,
+      (state, { payload }) => {
+        state.evolution.chain = payload.chain;
+      }
+    );
+    builder.addCase(
+      fetchEvolutionDetails.fulfilled,
+      (state, { payload }) => {
+        const evolution: [
+          number,
+          string,
+          PokemonDataInterface | undefined
+        ][][] = [];
+
+        for (let i = 0; i < payload.evolution.length; i++) {
+          const currentEvolution = payload.evolution[`${i}`];
+
+          for (let j = 0; j < currentEvolution.length; j++) {
+            const innerEvolution = currentEvolution[`${j}`];
+            const foundPokemon = payload.result.find(
+              ({ name }) => name === innerEvolution[1]
+            );
+            const pokemonValue: [
+              number,
+              string,
+              PokemonDataInterface | undefined
+            ] = [innerEvolution[0], innerEvolution[1], foundPokemon];
+
+            if (evolution[`${i}`]) {
+              evolution[`${i}`].push(pokemonValue);
+            } else {
+              evolution[`${i}`] = [pokemonValue];
+            }
+          }
+        }
+
+        state.arrangedEvolution = evolution;
+      }
+    );
+  }
 });
 
 export const { SET_VIEW_POKEMON } = pokemonSlice.actions;

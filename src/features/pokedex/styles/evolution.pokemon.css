@@ -1,0 +1,31 @@
+.evolution {
+  display: flex;
+  justify-content: space-around;
+  background-color: rgb(130, 129, 129);
+  padding: 2em;
+  margin-top: 3em;
+}
+
+.evolution__inner-stage {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  gap: 1em;
+}
+
+.inner-stage__pokemon > .types > .pokemon-type {
+  display: flex;
+  justify-content: center;
+  padding: 1em;
+}
+
+.asdf {
+  display: flex;
+}
+
+.inner-stage__pokemon > img {
+  width: 10em;
+  border-radius: 50%;
+  padding: 1em;
+  border: 0.5em solid white;
+}

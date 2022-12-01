@@ -11,12 +11,15 @@ import { DamageRelationsDataI } from '../interface/typeInterface';
 
 import '../styles/PokemonTypeOrWeakness.css';
 import { useAppDispatch } from '../../../hooks';
-
 interface Props {
-  name: string;
+  name?: string;
+  typeOrWeaknessArray?: TypeNameI[] | DamageRelationsDataI[];
 }
 
-const PokemonTypeOrWeakness: React.FC<Props> = ({ name }) => {
+const PokemonTypeOrWeakness: React.FC<Props> = ({
+  name,
+  typeOrWeaknessArray
+}) => {
   const dispatch = useAppDispatch();
   const { viewPokemon } = useAppSelector((state) => state.pokemon);
 
@@ -28,13 +31,17 @@ const PokemonTypeOrWeakness: React.FC<Props> = ({ name }) => {
     const typeColors = pokemonTypeColor();
     let arrayToUse: TypeNameI[] | DamageRelationsDataI[];
 
-    if (name === 'Type') {
-      arrayToUse = viewPokemon.types.map(({ type }) => ({
-        name: type.name,
-        url: type.url
-      }));
+    if (typeOrWeaknessArray) {
+      arrayToUse = typeOrWeaknessArray || [];
     } else {
-      arrayToUse = viewPokemon.weakness;
+      if (name === 'Type') {
+        arrayToUse = viewPokemon.types.map(({ type }) => ({
+          name: type.name,
+          url: type.url
+        }));
+      } else {
+        arrayToUse = viewPokemon.weakness;
+      }
     }
 
     return arrayToUse.map((val) => {
@@ -57,8 +64,8 @@ const PokemonTypeOrWeakness: React.FC<Props> = ({ name }) => {
   };
 
   return (
-    <div>
-      <Typography sx={{ margin: '10px 0' }}>{name}</Typography>
+    <div className="types">
+      {name && <Typography sx={{ margin: '10px 0' }}>{name}</Typography>}
       <div className="pokemon-type">{mapTypeOrWeakness()}</div>
     </div>
   );

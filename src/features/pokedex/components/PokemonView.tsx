@@ -5,9 +5,11 @@ import { addZeroes } from '../../../utils/helpers';
 import { useParams } from 'react-router-dom';
 
 import '../styles/PokemonView.css';
+
 import PokemonInfo from './PokemonInfo';
 import PokemonStats from './PokemonStats';
 import PokemonTypeOrWeakness from './PokemonTypeOrWeakness';
+import PokemonEvolution from './PokemonEvolution';
 
 import { viewPokemonData } from '../store/pokemonSlice';
 
@@ -59,6 +61,7 @@ const PokemonView: React.FC = () => {
           )}
         </div>
       </div>
+      {viewPokemon.order > 0 && <PokemonEvolution />}
     </div>
   );
 };
