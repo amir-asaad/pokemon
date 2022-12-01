@@ -12,10 +12,13 @@ import PokemonTypeOrWeakness from './PokemonTypeOrWeakness';
 import PokemonEvolution from './PokemonEvolution';
 
 import { viewPokemonData } from '../store/pokemonSlice';
+import EeveeEvolution from './EeveeEvolution';
 
 const PokemonView: React.FC = () => {
   const dispatch = useAppDispatch();
-  const viewPokemon = useAppSelector((state) => state.pokemon.viewPokemon);
+  const { viewPokemon, evolution } = useAppSelector(
+    (state) => state.pokemon
+  );
   const params = useParams();
 
   useEffect(() => {
@@ -25,6 +28,14 @@ const PokemonView: React.FC = () => {
       dispatch(viewPokemonData(id));
     }
   }, [dispatch, viewPokemon, params]);
+
+  const displayEvolution = () => {
+    return evolution.chain.species.name === 'eevee' ? (
+      <EeveeEvolution />
+    ) : (
+      <PokemonEvolution />
+    );
+  };
 
   return (
     <div className="main">
@@ -61,7 +72,7 @@ const PokemonView: React.FC = () => {
           )}
         </div>
       </div>
-      {viewPokemon.order > 0 && <PokemonEvolution />}
+      {viewPokemon.order > 0 && displayEvolution()}
     </div>
   );
 };
