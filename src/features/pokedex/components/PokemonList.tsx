@@ -29,8 +29,9 @@ const PokemonList: React.FC = () => {
           my: 2
         }}
         xs={12}
-        sm={5}
+        sm={4}
         md={3}
+        lg={2}
       >
         <PokemonCard
           name={val.name}

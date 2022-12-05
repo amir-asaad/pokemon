@@ -55,6 +55,7 @@ const PokemonCard: React.FC<Props> = ({ name, image, types }) => {
 
   return (
     <Card
+      raised
       sx={{
         width: '150px',
         mx: 'auto'

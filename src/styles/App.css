@@ -1,3 +1,7 @@
 .App {
   margin: 0 5%;
 }
+
+body {
+  background: linear-gradient(to left, #ff9999, #8be9fe);
+}

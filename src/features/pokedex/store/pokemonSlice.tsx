@@ -6,11 +6,7 @@ import {
   TypeDataI
 } from '../interface/typeInterface';
 
-import {
-  EvolutionI,
-  SpeciesI,
-  ArrangedEvolutionI
-} from '../interface/evolutionInterface';
+import { EvolutionI, SpeciesI } from '../interface/evolutionInterface';
 
 interface PokemonResultInterface {
   name: string;
@@ -135,7 +131,7 @@ export const fetchPokemonList = createAsyncThunk<
 >('pokemon/fetchPokemonList', async (_, { getState }) => {
   const { pokemon } = getState();
   const url =
-    pokemon.next || 'https://pokeapi.co/api/v2/pokemon/?limit=20&offset=0';
+    pokemon.next || 'https://pokeapi.co/api/v2/pokemon/?limit=30&offset=0';
   const response = await fetch(url);
   const data = await response.json();
 
