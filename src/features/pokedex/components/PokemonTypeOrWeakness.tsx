@@ -7,7 +7,7 @@ import {
   fetchPokemonWeaknessData,
   TypeNameI
 } from '../store/pokemonSlice';
-import { DamageRelationsDataI } from '../interface/typeInterface';
+import { DamageRelationsDataI } from '../interface/type.interface';
 
 import '../styles/PokemonTypeOrWeakness.css';
 import { useAppDispatch } from '../../../hooks';

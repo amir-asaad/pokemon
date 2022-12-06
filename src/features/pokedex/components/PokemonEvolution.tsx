@@ -6,7 +6,7 @@ import {
   PokemonDataInterface,
   TypeNameI
 } from '../store/pokemonSlice';
-import { EvolutionChainI } from '../interface/evolutionInterface';
+import { EvolutionChainI } from '../interface/evolution.interface';
 import '../styles/evolution.pokemon.css';
 import { addZeroes, capitalize } from '../../../utils/helpers';
 import { Typography } from '@mui/material';

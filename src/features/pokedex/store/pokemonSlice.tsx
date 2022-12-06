@@ -4,9 +4,9 @@ import { capitalize } from '../../../utils/helpers';
 import {
   DamageRelationsDataI,
   TypeDataI
-} from '../interface/typeInterface';
+} from '../interface/type.interface';
 
-import { EvolutionI, SpeciesI } from '../interface/evolutionInterface';
+import { EvolutionI, SpeciesI } from '../interface/evolution.interface';
 
 interface PokemonResultInterface {
   name: string;
