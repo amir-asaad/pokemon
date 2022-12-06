@@ -6,7 +6,7 @@ import {
   Stack,
   Typography
 } from '@mui/material';
-import React from 'react';
+import React, { memo } from 'react';
 import { PokemonTypesInterface } from '../store/pokemonSlice';
 import { pokemonTypeColor } from '../../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
@@ -83,4 +83,4 @@ const PokemonCard: React.FC<Props> = ({ name, image, types }) => {
   );
 };
 
-export default PokemonCard;
+export default memo(PokemonCard);

@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { fetchPokemonData, fetchPokemonList } from '../store/pokemonSlice';
 import { Grid } from '@mui/material';
-import PokemonCard from './PokemonCard';
-import LoadMorePokemon from './LoadMoreButton';
+
 import '../styles/PokemonList.css';
+
+import PokemonCard from './PokemonCard';
+import LoadingBar from './LoadingBar';
 
 const PokemonList: React.FC = () => {
   const dispatch = useAppDispatch();
   const { resultsData: pokemonData } = useAppSelector(
     (state) => state.pokemon
   );
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     dispatch(fetchPokemonList())
@@ -20,10 +23,46 @@ const PokemonList: React.FC = () => {
       });
   }, [dispatch]);
 
+  const observer = useRef<IntersectionObserver>();
+  const loadMoreRef = useCallback(
+    (node: any) => {
+      if (isFetching) {
+        return;
+      }
+
+      if (observer.current) {
+        observer.current?.disconnect();
+      }
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !isFetching) {
+          console.log('go here');
+          setIsFetching(true);
+          dispatch(fetchPokemonList())
+            .unwrap()
+            .then((data) => {
+              dispatch(fetchPokemonData(data.results))
+                .unwrap()
+                .then(() => {
+                  setIsFetching(false);
+                  console.log('isFetching', isFetching);
+                });
+            });
+        }
+      });
+
+      if (node) {
+        observer.current.observe(node);
+      }
+    },
+    [isFetching, dispatch]
+  );
+
   const pokemonCards = () => {
     return pokemonData.map((val, index) => (
       <Grid
         key={val.name}
+        className="here"
         item
         sx={{
           mx: 'auto',
@@ -33,6 +72,7 @@ const PokemonList: React.FC = () => {
         sm={4}
         md={3}
         lg={2}
+        ref={index === pokemonData.length - 1 ? loadMoreRef : null}
       >
         <PokemonCard
           name={val.name}
@@ -46,9 +86,7 @@ const PokemonList: React.FC = () => {
   return (
     <div>
       <Grid container>{pokemonCards()}</Grid>
-      <div className="load-more__btn">
-        <LoadMorePokemon />
-      </div>
+      {isFetching && <LoadingBar />}
     </div>
   );
 };
