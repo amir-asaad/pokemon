@@ -55,6 +55,7 @@ interface PokemonAbilityI {
 
 export interface PokemonDataInterface {
   name: string;
+  id: number;
   order: number;
   sprites: OtherSpritesInterface;
   artwork: string;
@@ -91,6 +92,7 @@ const initialState: PokemonStateInterface = {
   numberToFetch: [0, 19],
   viewPokemon: {
     name: '',
+    id: 0,
     order: 0,
     sprites: {
       other: {
@@ -255,6 +257,7 @@ export const pokemonSlice = createSlice({
         ...state.resultsData,
         ...payload.map((val) => ({
           name: capitalize(val.name),
+          id: val.id,
           order: val.order,
           sprites: {
             other: {
@@ -280,6 +283,7 @@ export const pokemonSlice = createSlice({
     builder.addCase(viewPokemonData.fulfilled, (state, { payload }) => {
       state.viewPokemon = {
         name: capitalize(payload.name),
+        id: payload.id,
         order: payload.order,
         sprites: {
           other: {

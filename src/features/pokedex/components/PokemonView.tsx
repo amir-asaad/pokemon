@@ -46,7 +46,7 @@ const PokemonView: React.FC = () => {
           marginBottom: '5%'
         }}
       >
-        {viewPokemon.name} - #{addZeroes(viewPokemon.order)}
+        {viewPokemon.name} - #{addZeroes(viewPokemon.id)}
       </Typography>
       <div className="main__display">
         <div className="display__first-column">
