@@ -36,7 +36,6 @@ const PokemonList: React.FC = () => {
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && !isFetching) {
-          console.log('go here');
           setIsFetching(true);
           dispatch(fetchPokemonList())
             .unwrap()
@@ -45,7 +44,6 @@ const PokemonList: React.FC = () => {
                 .unwrap()
                 .then(() => {
                   setIsFetching(false);
-                  console.log('isFetching', isFetching);
                 });
             });
         }

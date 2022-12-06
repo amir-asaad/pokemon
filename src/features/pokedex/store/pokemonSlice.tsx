@@ -134,9 +134,6 @@ export const fetchPokemonList = createAsyncThunk<
   const { pokemon } = getState();
   const url =
     pokemon.next || 'https://pokeapi.co/api/v2/pokemon/?limit=30&offset=0';
-
-  console.log(url);
-
   const response = await fetch(url);
   const data = await response.json();
 
@@ -250,8 +247,6 @@ export const pokemonSlice = createSlice({
     builder.addCase(fetchPokemonList.rejected, (state, action) => {});
     builder.addCase(fetchPokemonList.pending, (state) => {});
     builder.addCase(fetchPokemonData.fulfilled, (state, { payload }) => {
-      console.log('fulfilled', payload);
-
       state.resultsData = [
         ...state.resultsData,
         ...payload.map((val) => ({
