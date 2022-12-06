@@ -128,7 +128,7 @@ const initialState: PokemonStateInterface = {
 
 export const fetchPokemonList = createAsyncThunk<
   PokemonStateInterface,
-  string,
+  void,
   { state: RootState }
 >('pokemon/fetchPokemonList', async (_, { getState }) => {
   const { pokemon } = getState();
@@ -142,16 +142,10 @@ export const fetchPokemonList = createAsyncThunk<
 
 export const fetchPokemonData = createAsyncThunk<
   PokemonDataInterface[],
-  void,
-  { state: RootState }
->('pokemon/fetchPokemonData', async (_, { getState }) => {
-  const { pokemon } = getState();
-  const { results, resultsData } = pokemon;
-  const startData = resultsData.length;
-  const filtered = results.filter((val, index) => index >= startData);
-
+  PokemonResultInterface[]
+>('pokemon/fetchPokemonData', async (listData) => {
   const responses = await Promise.all(
-    filtered.map(({ url }) => fetch(url))
+    listData.map(({ url }) => fetch(url))
   );
 
   return await Promise.all(responses.map((response) => response.json()));

@@ -8,16 +8,17 @@ import '../styles/PokemonList.css';
 
 const PokemonList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { results: pokemonList, resultsData: pokemonData } =
-    useAppSelector((state) => state.pokemon);
+  const { resultsData: pokemonData } = useAppSelector(
+    (state) => state.pokemon
+  );
 
   useEffect(() => {
-    dispatch(fetchPokemonList(''));
+    dispatch(fetchPokemonList())
+      .unwrap()
+      .then((data) => {
+        dispatch(fetchPokemonData(data.results));
+      });
   }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchPokemonData());
-  }, [pokemonList, dispatch]);
 
   const pokemonCards = () => {
     return pokemonData.map((val, index) => (

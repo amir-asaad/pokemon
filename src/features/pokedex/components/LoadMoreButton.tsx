@@ -1,7 +1,7 @@
 import { LoadingButton } from '@mui/lab';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../hooks';
-import { fetchPokemonList } from '../store/pokemonSlice';
+import { fetchPokemonList, fetchPokemonData } from '../store/pokemonSlice';
 
 const LoadMorePokemon: React.FC = () => {
   const [didClickLoadMore, setDidClickLoadMore] = useState(false);
@@ -9,7 +9,11 @@ const LoadMorePokemon: React.FC = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (didClickLoadMore) {
-      dispatch(fetchPokemonList(''));
+      dispatch(fetchPokemonList())
+        .unwrap()
+        .then((data) => {
+          dispatch(fetchPokemonData(data.results));
+        });
       setDidClickLoadMore(false);
     }
   }, [dispatch, didClickLoadMore]);
