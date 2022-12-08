@@ -1,12 +1,17 @@
-import React from 'react';
+import { Container } from '@mui/material';
 import PokemonList from './features/pokedex/components/PokemonList';
 import './styles/App.css';
 
 function App() {
   return (
-    <div className="App">
+    <Container
+      className="App"
+      sx={{
+        padding: 0
+      }}
+    >
       <PokemonList />
-    </div>
+    </Container>
   );
 }
 

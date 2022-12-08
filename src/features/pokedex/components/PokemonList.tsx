@@ -62,16 +62,15 @@ const PokemonList: React.FC = () => {
     return pokemonData.map((val, index) => (
       <Grid
         key={val.name}
-        className="here"
         item
         sx={{
           mx: 'auto',
           my: 2
         }}
         xs={12}
-        sm={4}
-        md={3}
-        lg={2}
+        sm={6}
+        md={4}
+        lg={3}
         ref={index === pokemonData.length - 1 ? loadMoreRef : null}
       >
         <PokemonCard

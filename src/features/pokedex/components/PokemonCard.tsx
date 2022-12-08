@@ -28,7 +28,9 @@ const PokemonCard: React.FC<Props> = ({ name, image, types }) => {
           label={type.name}
           size="small"
           style={{
-            backgroundColor: typeObject ? typeObject.color : 'white'
+            backgroundColor: typeObject ? typeObject.color : 'white',
+            color: 'white',
+            padding: '5px'
           }}
         />
       );
@@ -39,18 +41,29 @@ const PokemonCard: React.FC<Props> = ({ name, image, types }) => {
     <Card
       raised
       sx={{
-        width: '150px',
-        mx: 'auto'
+        mx: 'auto',
+        width: {
+          sm: '80%'
+        }
       }}
     >
-      <CardActionArea href={`/${name}`}>
+      <CardActionArea
+        href={`/${name}`}
+        sx={{ m: 0 }}
+      >
         <CardMedia
           component="img"
           image={image}
-          height="140"
-          sx={{ mt: 2 }}
+          sx={{
+            mt: 2
+          }}
         />
-        <Typography align="center">{name}</Typography>
+        <Typography
+          align="center"
+          sx={{ fontSize: { md: '1.2rem' } }}
+        >
+          {name}
+        </Typography>
         <Stack
           direction="row"
           spacing={1}
