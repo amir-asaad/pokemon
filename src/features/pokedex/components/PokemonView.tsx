@@ -13,6 +13,7 @@ import PokemonEvolution from './PokemonEvolution';
 
 import { viewPokemonData } from '../store/pokemonSlice';
 import EeveeEvolution from './EeveeEvolution';
+import { RESET_VIEW_POKEMON } from '../store/pokemonSlice';
 
 const PokemonView: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -20,6 +21,14 @@ const PokemonView: React.FC = () => {
     (state) => state.pokemon
   );
   const params = useParams();
+
+  useEffect(() => {
+    return function () {
+      dispatch(RESET_VIEW_POKEMON());
+
+      RESET_VIEW_POKEMON();
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (viewPokemon.order < 1) {

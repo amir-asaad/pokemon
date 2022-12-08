@@ -233,9 +233,11 @@ export const pokemonSlice = createSlice({
   name: 'pokemon',
   initialState,
   reducers: {
-    SET_VIEW_POKEMON: (state, action) => {
-      state.viewPokemon = action.payload;
-      // state.viewPokemon = payload;
+    RESET_VIEW_POKEMON: (state) => {
+      state.viewPokemon = initialState.viewPokemon;
+      state.typeData = initialState.typeData;
+      state.evolution = initialState.evolution;
+      state.arrangedEvolution = initialState.arrangedEvolution;
     }
   },
   extraReducers: (builder) => {
@@ -377,6 +379,6 @@ export const pokemonSlice = createSlice({
   }
 });
 
-export const { SET_VIEW_POKEMON } = pokemonSlice.actions;
+export const { RESET_VIEW_POKEMON } = pokemonSlice.actions;
 
 export default pokemonSlice.reducer;

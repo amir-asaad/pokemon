@@ -9,7 +9,7 @@ import {
 import { EvolutionChainI } from '../interface/evolution.interface';
 import '../styles/evolution.pokemon.css';
 import { addZeroes, capitalize } from '../../../utils/helpers';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import PokemonTypeOrWeakness from './PokemonTypeOrWeakness';
 
 const PokemonEvolution: React.FC = () => {
@@ -105,6 +105,7 @@ const PokemonEvolution: React.FC = () => {
           )}`}
         </Typography>
         <PokemonTypeOrWeakness typeOrWeaknessArray={types} />
+        <Button href="/">Go back</Button>
       </div>
     );
   };
