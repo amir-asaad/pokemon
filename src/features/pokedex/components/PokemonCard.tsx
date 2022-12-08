@@ -9,6 +9,7 @@ import {
 import React, { memo } from 'react';
 import { PokemonTypesInterface } from '../store/pokemonSlice';
 import { pokemonTypeColor } from '../../../utils/helpers';
+import { useNavigate } from 'react-router-dom';
 interface Props {
   name: string;
   image: string;
@@ -16,6 +17,14 @@ interface Props {
 }
 
 const PokemonCard: React.FC<Props> = ({ name, image, types }) => {
+  const navigate = useNavigate();
+  const onViewPokemon = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+
+    navigate(`/${name}`);
+  };
   const mapTypes = () => {
     return types.map(({ type }) => {
       const typeObject = pokemonTypeColor().find(
@@ -48,7 +57,9 @@ const PokemonCard: React.FC<Props> = ({ name, image, types }) => {
       }}
     >
       <CardActionArea
-        href={`/${name}`}
+        onClick={(event) => {
+          onViewPokemon(event);
+        }}
         sx={{ m: 0 }}
       >
         <CardMedia
