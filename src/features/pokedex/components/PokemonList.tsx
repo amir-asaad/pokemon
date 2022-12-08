@@ -16,12 +16,14 @@ const PokemonList: React.FC = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchPokemonList())
-      .unwrap()
-      .then((data) => {
-        dispatch(fetchPokemonData(data.results));
-      });
-  }, [dispatch]);
+    if (pokemonData.length === 0) {
+      dispatch(fetchPokemonList())
+        .unwrap()
+        .then((data) => {
+          dispatch(fetchPokemonData(data.results));
+        });
+    }
+  }, [dispatch, pokemonData]);
 
   const observer = useRef<IntersectionObserver>();
   const loadMoreRef = useCallback(
