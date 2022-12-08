@@ -1,51 +1,70 @@
-import { Typography } from '@mui/material';
-import React from 'react';
+import { Card, Grid, Typography } from '@mui/material';
+import { Container } from '@mui/system';
+import React, { memo } from 'react';
 import { PokemonStatsI } from '../store/pokemonSlice';
 
-import '../styles/PokemonStats.css';
+import '../styles/stats.style.css';
 
 interface Props {
   stats: PokemonStatsI[];
 }
 
 const PokemonStats: React.FC<Props> = ({ stats }) => {
-  const listStat = (stat: string, base_stat: number) => {
-    const howManyToColor = parseInt(`${(base_stat * 15) / 200}`, 10);
+  const getPercentageHeight = (base_stat: number) => {
+    return parseInt(`${(base_stat * 15) / 200}`, 10) * 10;
+  };
 
-    return [...Array(15)].map((val, index) => {
+  const mapStats = () => {
+    return stats.map(({ base_stat, stat }) => {
+      const percentageHeight = getPercentageHeight(base_stat);
+
       return (
-        <li
-          key={`${stat}-${index}`}
-          className={`value__list ${
-            15 - howManyToColor <= index ? 'is-colored' : 'is-not-colored'
-          }`}
-        />
+        <Grid
+          item
+          sx={{
+            my: 2
+          }}
+          xs={2}
+          key={stat.name}
+        >
+          <Card
+            sx={{
+              height: '200px',
+              width: '50%',
+              mx: 'auto'
+            }}
+          >
+            <div
+              style={{
+                height: `${100 - percentageHeight}%`,
+                backgroundColor: 'white'
+              }}
+            />
+            <div
+              className="stats__value--animation"
+              style={{
+                height: `${percentageHeight}%`,
+                backgroundColor: 'pink'
+              }}
+            />
+          </Card>
+          <Typography
+            align="center"
+            sx={{ overflowWrap: 'break-word', my: 1 }}
+          >
+            {stat.name}
+          </Typography>
+        </Grid>
       );
     });
   };
 
-  const mapStats = () => {
-    return stats.map(({ base_stat, stat }) => (
-      <ul
-        key={stat.name}
-        className="stats-wrapper__stat-list"
-      >
-        <li style={{ listStyleType: 'none' }}>
-          <ul className="stat-list__value">
-            {listStat(stat.name, base_stat)}
-          </ul>
-          <Typography align="center">{stat.name}</Typography>
-        </li>
-      </ul>
-    ));
-  };
-
   return (
-    <div className="main__stats">
+    <Container sx={{ backgroundColor: 'gray' }}>
       <Typography sx={{ padding: '10px' }}>Stats</Typography>
-      <div className="stats-wrapper">{mapStats()}</div>
-    </div>
+      <Grid container>{mapStats()}</Grid>
+    </Container>
   );
 };
 
-export default PokemonStats;
+export default memo(PokemonStats);
