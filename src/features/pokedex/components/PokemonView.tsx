@@ -1,4 +1,10 @@
-import { Card, CardMedia, Typography } from '@mui/material';
+import {
+  Card,
+  CardMedia,
+  Container,
+  Grid,
+  Typography
+} from '@mui/material';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { addZeroes } from '../../../utils/helpers';
@@ -47,42 +53,93 @@ const PokemonView: React.FC = () => {
   };
 
   return (
-    <div className="main">
+    <Container sx={{ mt: '10%' }}>
       <Typography
         align="center"
         variant="h4"
         sx={{
-          marginBottom: '5%'
+          marginBottom: '5%',
+          mx: '2%'
         }}
       >
         {viewPokemon.name} - #{addZeroes(viewPokemon.id)}
       </Typography>
-      <div className="main__display">
-        <div className="display__first-column">
-          <Card sx={{ boxShadow: 0 }}>
-            <CardMedia
-              component="img"
-              image={viewPokemon.artwork}
-              height="300"
-              sx={{
-                backgroundColor: '#f0eded',
-                objectFit: 'contain',
-                marginBottom: '50px'
-              }}
-            />
-          </Card>
-          <PokemonStats stats={viewPokemon.stats} />
-        </div>
-        <div className="display__second-column">
-          <PokemonInfo />
-          {viewPokemon.order > 0 && <PokemonTypeOrWeakness name="Type" />}
-          {viewPokemon.order > 0 && (
-            <PokemonTypeOrWeakness name="Weakness" />
-          )}
-        </div>
-      </div>
-      {viewPokemon.order > 0 && displayEvolution()}
-    </div>
+      <Grid
+        className="outside-grid"
+        container
+        sx={{
+          flexDirection: {
+            md: 'row'
+          }
+        }}
+        spacing={3}
+      >
+        <Grid
+          item
+          md={6}
+          flexGrow="1"
+        >
+          <Grid
+            container
+            direction="column"
+            spacing={3}
+          >
+            <Grid item>
+              <Card sx={{ boxShadow: 0 }}>
+                <CardMedia
+                  component="img"
+                  image={viewPokemon.artwork}
+                  sx={{
+                    backgroundColor: '#f0eded',
+                    objectFit: 'contain'
+                  }}
+                />
+              </Card>
+            </Grid>
+            <Grid item>
+              <PokemonStats stats={viewPokemon.stats} />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          md={6}
+          sx={{ width: '100%' }}
+        >
+          <Grid
+            direction="column"
+            container
+            spacing={3}
+          >
+            <Grid item>
+              <PokemonInfo />
+            </Grid>
+            <Grid item>
+              {viewPokemon.order > 0 && (
+                <PokemonTypeOrWeakness name="Type" />
+              )}
+            </Grid>
+            <Grid item>
+              {viewPokemon.order > 0 && (
+                <PokemonTypeOrWeakness name="Weakness" />
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid
+          item
+          flexGrow={1}
+        >
+          {viewPokemon.order > 0 && displayEvolution()}
+        </Grid>
+      </Grid>
+      {/* <div className="main__display">
+        <div className="display__first-column"></div>
+        <div className="display__second-column"></div>
+      </div> */}
+    </Container>
   );
 };
 

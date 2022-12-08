@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '../../../hooks';
 import { capitalize } from '../../../utils/helpers';
@@ -29,14 +29,14 @@ const PokemonInfo: React.FC = () => {
   };
 
   return (
-    <div className="pokemon-info__wrapper">
+    <Container className="pokemon-info__wrapper">
       <Typography sx={headerCss}>Height</Typography>
       <Typography>{height} cm</Typography>
       <Typography sx={headerCss}>Weight</Typography>
       <Typography>{weight} kg</Typography>
       <Typography sx={headerCss}>Abilities</Typography>
       <Typography>{mapAbilities()}</Typography>
-    </div>
+    </Container>
   );
 };
 

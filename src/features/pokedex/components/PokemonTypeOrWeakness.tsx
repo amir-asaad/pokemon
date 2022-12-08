@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useAppSelector } from '../../../hooks';
 import { pokemonTypeColor } from '../../../utils/helpers';
@@ -53,7 +53,9 @@ const PokemonTypeOrWeakness: React.FC<Props> = ({
           sx={{
             backgroundColor: foundColor?.color,
             borderRadius: '3px',
-            padding: '5px 20px',
+            textAlign: 'center',
+            // flexGrow: 1,
+            padding: '5px 10px',
             color: 'white'
           }}
         >
@@ -64,10 +66,10 @@ const PokemonTypeOrWeakness: React.FC<Props> = ({
   };
 
   return (
-    <div className="types">
+    <Container>
       {name && <Typography sx={{ margin: '10px 0' }}>{name}</Typography>}
       <div className="pokemon-type">{mapTypeOrWeakness()}</div>
-    </div>
+    </Container>
   );
 };
 
