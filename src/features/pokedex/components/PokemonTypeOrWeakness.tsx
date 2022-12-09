@@ -14,11 +14,13 @@ import { useAppDispatch } from '../../../hooks';
 interface Props {
   name?: string;
   typeOrWeaknessArray?: TypeNameI[] | DamageRelationsDataI[];
+  centerList?: boolean;
 }
 
 const PokemonTypeOrWeakness: React.FC<Props> = ({
   name,
-  typeOrWeaknessArray
+  typeOrWeaknessArray,
+  centerList
 }) => {
   const dispatch = useAppDispatch();
   const { viewPokemon } = useAppSelector((state) => state.pokemon);
@@ -68,7 +70,12 @@ const PokemonTypeOrWeakness: React.FC<Props> = ({
   return (
     <Container>
       {name && <Typography sx={{ margin: '10px 0' }}>{name}</Typography>}
-      <div className="pokemon-type">{mapTypeOrWeakness()}</div>
+      <div
+        className="pokemon-type"
+        style={{ justifyContent: centerList ? 'center' : '' }}
+      >
+        {mapTypeOrWeakness()}
+      </div>
     </Container>
   );
 };

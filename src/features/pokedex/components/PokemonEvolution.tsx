@@ -9,8 +9,9 @@ import {
 import { EvolutionChainI } from '../interface/evolution.interface';
 import '../styles/evolution.pokemon.css';
 import { addZeroes, capitalize } from '../../../utils/helpers';
-import { Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import PokemonTypeOrWeakness from './PokemonTypeOrWeakness';
+import { Box } from '@mui/system';
 
 const PokemonEvolution: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -60,26 +61,9 @@ const PokemonEvolution: React.FC = () => {
       });
   }, [dispatch]);
 
-  const displayStage = () => {
-    return arrangedEvolution.map((stage, stageIndex) => {
-      return (
-        <div
-          className="evolution__inner-stage"
-          key={`evolution-${stageIndex}`}
-        >
-          {stage.map((pokemon, pokemonIndex) => (
-            <div key={pokemonIndex}>
-              {displayPokemon(pokemon[2], stageIndex)}
-            </div>
-          ))}
-        </div>
-      );
-    });
-  };
-
   const displayPokemon = (
     pokemon: PokemonDataInterface | undefined,
-    stageIndex: Number
+    pokemonIndex: number
   ) => {
     const types: TypeNameI[] =
       pokemon?.types.map(({ type }) => ({
@@ -88,28 +72,156 @@ const PokemonEvolution: React.FC = () => {
       })) || [];
 
     return (
-      <div className="inner-stage__pokemon">
-        <img
+      <Box
+        mb={0.5}
+        sx={{
+          height: '100%',
+          py: 5
+        }}
+      >
+        <Box
+          component="img"
           src={pokemon?.sprites.other['official-artwork'].front_default}
           alt={pokemon?.name}
+          sx={{
+            objectFit: 'contain',
+            maxWidth: {
+              md: '150px'
+            },
+            width: {
+              xs: '100%'
+            },
+            display: 'block',
+            margin: '0 auto',
+            border: '5px solid white',
+            borderRadius: '50%',
+            zIndex: pokemonIndex + 1
+          }}
         />
         <Typography
           align="center"
-          variant="h5"
           sx={{
-            color: 'white'
+            color: 'white',
+            fontSize: {
+              sm: '24px'
+            },
+            mb: 1,
+            overflowWrap: {
+              xs: 'break-word'
+            }
           }}
         >
-          {`${capitalize(pokemon?.name || '')} #${addZeroes(
-            pokemon?.order || 0
-          )}`}
+          {`${capitalize(pokemon?.name || '')}`}
         </Typography>
-        <PokemonTypeOrWeakness typeOrWeaknessArray={types} />
-      </div>
+        <Typography
+          align="center"
+          sx={{
+            color: 'white',
+            fontSize: {
+              sm: '20px'
+            },
+            mb: 1,
+            overflowWrap: {
+              xs: 'break-word'
+            }
+          }}
+        >
+          #{`${addZeroes(pokemon?.order || 0)}`}
+        </Typography>
+        <PokemonTypeOrWeakness
+          typeOrWeaknessArray={types}
+          centerList
+        />
+      </Box>
     );
   };
 
-  return <div className="evolution">{displayStage()}</div>;
+  const layoutPokemon = (
+    stage: [number, string, PokemonDataInterface | undefined][]
+  ) => {
+    return (
+      <Grid
+        className="inner__container"
+        justifyContent="space-around"
+        container
+        sx={{
+          flexDirection: {
+            md: 'column'
+          }
+        }}
+      >
+        {stage.map((pokemon, pokemonIndex) => {
+          return (
+            <Grid
+              className="inner__item"
+              item
+              flexGrow={1}
+              xs={4}
+              md={12}
+              key={pokemonIndex}
+            >
+              {displayPokemon(pokemon[2], pokemonIndex)}
+            </Grid>
+          );
+        })}
+      </Grid>
+    );
+  };
+
+  const layoutStage = () => {
+    return arrangedEvolution.map((stage, stageIndex) => {
+      return (
+        <Grid
+          item
+          key={`evolution-${stageIndex}`}
+          flexGrow={1}
+          mb="2"
+          sx={{
+            display: 'block',
+            margin: 'auto 0'
+          }}
+        >
+          {layoutPokemon(stage)}
+        </Grid>
+      );
+    });
+  };
+
+  return (
+    <Box
+      component="div"
+      sx={{
+        mt: 3,
+        padding: 3,
+        backgroundColor: '#6c757d',
+        borderRadius: '5px'
+      }}
+    >
+      <Typography
+        color="white"
+        sx={{
+          ml: 2,
+          fontSize: {
+            sm: '1.5rem'
+          },
+          fontWeight: 'bold'
+        }}
+      >
+        Evolution
+      </Typography>
+      <Grid
+        container
+        sx={{
+          flexDirection: {
+            xs: 'column',
+            md: 'row'
+          }
+        }}
+      >
+        {layoutStage()}
+      </Grid>
+    </Box>
+  );
 };
 
 export default PokemonEvolution;

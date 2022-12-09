@@ -53,7 +53,7 @@ const PokemonView: React.FC = () => {
   };
 
   return (
-    <Container sx={{ mt: '10%' }}>
+    <Container sx={{ my: '10%' }}>
       <Typography
         align="center"
         variant="h4"
@@ -127,14 +127,7 @@ const PokemonView: React.FC = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid
-          item
-          flexGrow={1}
-        >
-          {viewPokemon.order > 0 && displayEvolution()}
-        </Grid>
-      </Grid>
+      {viewPokemon.order > 0 && displayEvolution()}
       {/* <div className="main__display">
         <div className="display__first-column"></div>
         <div className="display__second-column"></div>
