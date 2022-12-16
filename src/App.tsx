@@ -9,6 +9,7 @@ function App() {
       sx={{
         padding: 0
       }}
+      maxWidth="xl"
     >
       <PokemonList />
     </Container>

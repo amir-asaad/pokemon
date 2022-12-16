@@ -14,12 +14,6 @@ export interface SpeciesI {
   url: string;
 }
 
-export interface PokemonSpeciesI {
-  evolution_chain: {
-    url: string;
-  };
-}
-
 export interface ArrangedEvolutionI {
   chain: [number, string, PokemonDataInterface | undefined][];
 }

@@ -1,0 +1,11 @@
+.details {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  .details__description {
+    overflow-wrap: break-word;
+    padding: 10px 0;
+  }
+}

@@ -1,0 +1,13 @@
+.name-image {
+  position: relative;
+
+  .name-image__name {
+    overflow-wrap: break-word;
+  }
+
+  .name-image__image {
+    display: block;
+    margin: auto;
+    border-radius: 20px;
+  }
+}

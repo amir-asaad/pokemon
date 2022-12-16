@@ -7,6 +7,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PokemonView from './features/pokedex/components/PokemonView';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
+import './styles/main.scss';
+
 const theme = createTheme({
   breakpoints: {
     values: {

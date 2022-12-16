@@ -1,27 +1,35 @@
 import {
+  Box,
   Card,
-  CardMedia,
   Container,
   Grid,
-  Typography
+  List,
+  ListItemButton
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { addZeroes } from '../../../utils/helpers';
 import { useParams } from 'react-router-dom';
 
 import '../styles/PokemonView.css';
 
-import PokemonInfo from './PokemonInfo';
-import PokemonStats from './PokemonStats';
-import PokemonTypeOrWeakness from './PokemonTypeOrWeakness';
 import PokemonEvolution from './PokemonEvolution';
 
-import { viewPokemonData } from '../store/pokemonSlice';
+import { fetchSpecies, viewPokemonData } from '../store/pokemonSlice';
 import EeveeEvolution from './EeveeEvolution';
 import { RESET_VIEW_POKEMON } from '../store/pokemonSlice';
 
+import Details from './Details';
+import Forms from './Forms';
+import Weakness from './Weakness';
+import Stats from './Stats';
+import Evolution from './Evolution';
+import NameAndImage from './NameAndImage';
+
 const PokemonView: React.FC = () => {
+  const [activeDisplay, setActiveDisplay] = useState(0);
+
+  const buttons = ['Details', 'Forms', 'Weakness', 'Stats', 'Evolution'];
+
   const dispatch = useAppDispatch();
   const { viewPokemon, evolution } = useAppSelector(
     (state) => state.pokemon
@@ -40,98 +48,107 @@ const PokemonView: React.FC = () => {
     if (viewPokemon.order < 1) {
       const id = params.id ? params.id.toLowerCase() : '';
 
-      dispatch(viewPokemonData(id));
+      dispatch(viewPokemonData(id))
+        .unwrap()
+        .then((data) => {
+          dispatch(fetchSpecies());
+        });
     }
   }, [dispatch, viewPokemon, params]);
 
-  const displayEvolution = () => {
-    return evolution.chain.species.name === 'eevee' ? (
-      <EeveeEvolution />
-    ) : (
-      <PokemonEvolution />
-    );
+  // const displayEvolution = () => {
+  //   return evolution.chain.species.name === 'eevee' ? (
+  //     <EeveeEvolution />
+  //   ) : (
+  //     <PokemonEvolution />
+  //   );
+  // };
+
+  const onDisplay = (buttonIndex: number) => {
+    setActiveDisplay(buttonIndex);
+  };
+
+  const showActiveDisplay = () => {
+    console.log('go here', activeDisplay);
+
+    switch (activeDisplay) {
+      case 0:
+        return <Details />;
+      case 1:
+        return <Forms />;
+      case 2:
+        return <Weakness />;
+      case 3:
+        return <Stats />;
+      case 4:
+        return <Evolution />;
+      default:
+        return <Details />;
+    }
   };
 
   return (
-    <Container sx={{ my: '10%' }}>
-      <Typography
-        align="center"
-        variant="h4"
-        sx={{
-          marginBottom: '5%',
-          mx: '2%'
-        }}
-      >
-        {viewPokemon.name} - #{addZeroes(viewPokemon.id)}
-      </Typography>
-      <Grid
-        className="outside-grid"
-        container
-        sx={{
-          flexDirection: {
-            md: 'row'
-          }
-        }}
-        spacing={3}
-      >
+    <Container
+      className="view"
+      sx={{ my: '10%' }}
+      maxWidth="xl"
+    >
+      <Card className="view__card">
         <Grid
-          item
-          md={6}
-          flexGrow="1"
+          container
+          sx={{
+            flexDirection: { xs: 'column', lg: 'row' },
+            border: '1px solid pink',
+            padding: 3
+          }}
+          minHeight="300px"
+          spacing={3}
         >
           <Grid
-            container
-            direction="column"
-            spacing={3}
+            item
+            flexBasis={0}
+            flexGrow={1}
           >
-            <Grid item>
-              <Card sx={{ boxShadow: 0 }}>
-                <CardMedia
-                  component="img"
-                  image={viewPokemon.artwork}
-                  sx={{
-                    backgroundColor: '#f0eded',
-                    objectFit: 'contain'
-                  }}
-                />
-              </Card>
-            </Grid>
-            <Grid item>
-              <PokemonStats stats={viewPokemon.stats} />
-            </Grid>
+            <NameAndImage />
           </Grid>
-        </Grid>
-        <Grid
-          item
-          md={6}
-          sx={{ width: '100%' }}
-        >
           <Grid
-            direction="column"
-            container
-            spacing={3}
+            item
+            flexGrow={1}
+            flexBasis={0}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column'
+            }}
           >
-            <Grid item>
-              <PokemonInfo />
-            </Grid>
-            <Grid item>
-              {viewPokemon.order > 0 && (
-                <PokemonTypeOrWeakness name="Type" />
-              )}
-            </Grid>
-            <Grid item>
-              {viewPokemon.order > 0 && (
-                <PokemonTypeOrWeakness name="Weakness" />
-              )}
-            </Grid>
+            <List
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap'
+              }}
+            >
+              {buttons.map((button, buttonIndex) => {
+                return (
+                  <ListItemButton
+                    classes={{
+                      selected: `view__button--active ${viewPokemon.types[0]?.type.name}--background`
+                    }}
+                    key={`button-${buttonIndex}`}
+                    selected={activeDisplay === buttonIndex}
+                    sx={{ justifyContent: 'center' }}
+                    onClick={() => {
+                      onDisplay(buttonIndex);
+                    }}
+                  >
+                    {button}
+                  </ListItemButton>
+                );
+              })}
+            </List>
+            <Box sx={{ flexGrow: 1 }}>{showActiveDisplay()}</Box>
           </Grid>
         </Grid>
-      </Grid>
-      {viewPokemon.order > 0 && displayEvolution()}
-      {/* <div className="main__display">
-        <div className="display__first-column"></div>
-        <div className="display__second-column"></div>
-      </div> */}
+      </Card>
     </Container>
   );
 };

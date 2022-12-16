@@ -7,6 +7,7 @@ import {
 } from '../interface/type.interface';
 
 import { EvolutionI, SpeciesI } from '../interface/evolution.interface';
+import { PokemonSpeciesI } from '../interface/species.interface';
 
 interface PokemonResultInterface {
   name: string;
@@ -82,6 +83,7 @@ export interface PokemonStateInterface {
     string,
     PokemonDataInterface | undefined
   ][][];
+  pokemonSpecies: PokemonSpeciesI;
 }
 
 const initialState: PokemonStateInterface = {
@@ -112,6 +114,12 @@ const initialState: PokemonStateInterface = {
       name: '',
       url: ''
     }
+  },
+  pokemonSpecies: {
+    evolution_chain: {
+      url: ''
+    },
+    flavor_text_entries: []
   },
   typeData: [],
   evolution: {
@@ -227,6 +235,20 @@ export const fetchEvolutionDetails = createAsyncThunk<
     evolution,
     result: responses
   };
+});
+
+export const fetchSpecies = createAsyncThunk<
+  PokemonSpeciesI,
+  void,
+  { state: RootState }
+>('pokemon/fetchSpecies', async (here, { getState }) => {
+  const state = getState();
+  const speciesUrl = state.pokemon.viewPokemon.species.url;
+
+  const data = await fetch(speciesUrl);
+  const json = await data.json();
+
+  return json;
 });
 
 export const pokemonSlice = createSlice({
@@ -376,6 +398,11 @@ export const pokemonSlice = createSlice({
         state.arrangedEvolution = evolution;
       }
     );
+    builder.addCase(fetchSpecies.fulfilled, (state, { payload }) => {
+      state.pokemonSpecies.evolution_chain = payload.evolution_chain;
+      state.pokemonSpecies.flavor_text_entries =
+        payload.flavor_text_entries;
+    });
   }
 });
 
