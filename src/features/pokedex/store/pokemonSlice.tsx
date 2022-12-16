@@ -84,6 +84,7 @@ export interface PokemonStateInterface {
     PokemonDataInterface | undefined
   ][][];
   pokemonSpecies: PokemonSpeciesI;
+  varietiesData: PokemonDataInterface[];
 }
 
 const initialState: PokemonStateInterface = {
@@ -119,9 +120,11 @@ const initialState: PokemonStateInterface = {
     evolution_chain: {
       url: ''
     },
-    flavor_text_entries: []
+    flavor_text_entries: [],
+    varieties: []
   },
   typeData: [],
+  varietiesData: [],
   evolution: {
     chain: {
       species: {
@@ -241,7 +244,7 @@ export const fetchSpecies = createAsyncThunk<
   PokemonSpeciesI,
   void,
   { state: RootState }
->('pokemon/fetchSpecies', async (here, { getState }) => {
+>('pokemon/fetchSpecies', async (_, { getState }) => {
   const state = getState();
   const speciesUrl = state.pokemon.viewPokemon.species.url;
 
@@ -249,6 +252,23 @@ export const fetchSpecies = createAsyncThunk<
   const json = await data.json();
 
   return json;
+});
+
+export const fetchVarieties = createAsyncThunk<
+  PokemonDataInterface[],
+  void,
+  { state: RootState }
+>('pokemon/fetchVarities', async (_, { getState }) => {
+  const state = getState();
+  const data = await Promise.all(
+    state.pokemon.pokemonSpecies.varieties.map(({ pokemon }) =>
+      fetch(pokemon.url)
+    )
+  ).then(async (responses) => {
+    return await Promise.all(responses.map((response) => response.json()));
+  });
+
+  return data;
 });
 
 export const pokemonSlice = createSlice({
@@ -260,6 +280,11 @@ export const pokemonSlice = createSlice({
       state.typeData = initialState.typeData;
       state.evolution = initialState.evolution;
       state.arrangedEvolution = initialState.arrangedEvolution;
+    },
+    setState: (state, { payload }) => {
+      for (const i of payload) {
+        state[`${i.stateName as keyof PokemonStateInterface}`] = i.value;
+      }
     }
   },
   extraReducers: (builder) => {
@@ -402,10 +427,14 @@ export const pokemonSlice = createSlice({
       state.pokemonSpecies.evolution_chain = payload.evolution_chain;
       state.pokemonSpecies.flavor_text_entries =
         payload.flavor_text_entries;
+      state.pokemonSpecies.varieties = payload.varieties;
+    });
+    builder.addCase(fetchVarieties.fulfilled, (state, { payload }) => {
+      state.varietiesData = payload;
     });
   }
 });
 
-export const { RESET_VIEW_POKEMON } = pokemonSlice.actions;
+export const { RESET_VIEW_POKEMON, setState } = pokemonSlice.actions;
 
 export default pokemonSlice.reducer;

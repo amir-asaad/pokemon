@@ -14,9 +14,13 @@ import '../styles/PokemonView.css';
 
 import PokemonEvolution from './PokemonEvolution';
 
-import { fetchSpecies, viewPokemonData } from '../store/pokemonSlice';
+import {
+  fetchSpecies,
+  fetchVarieties,
+  viewPokemonData
+} from '../store/pokemonSlice';
 import EeveeEvolution from './EeveeEvolution';
-import { RESET_VIEW_POKEMON } from '../store/pokemonSlice';
+import { RESET_VIEW_POKEMON, setState } from '../store/pokemonSlice';
 
 import Details from './Details';
 import Forms from './Forms';
@@ -45,13 +49,37 @@ const PokemonView: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (viewPokemon.order < 1) {
+    if (viewPokemon.id < 1) {
       const id = params.id ? params.id.toLowerCase() : '';
 
       dispatch(viewPokemonData(id))
         .unwrap()
         .then((data) => {
-          dispatch(fetchSpecies());
+          dispatch(fetchSpecies())
+            .unwrap()
+            .then((speciesData) => {
+              // No other varieties
+              if (speciesData.varieties.length > 1) {
+                dispatch(fetchVarieties());
+              } else {
+                // Has other varieties
+                dispatch(
+                  setState([
+                    {
+                      stateName: 'varietiesData',
+                      value: [
+                        {
+                          name: data.name,
+                          image:
+                            data.sprites.other['official-artwork']
+                              .front_default
+                        }
+                      ]
+                    }
+                  ])
+                );
+              }
+            });
         });
     }
   }, [dispatch, viewPokemon, params]);

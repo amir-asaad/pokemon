@@ -1,0 +1,17 @@
+.forms {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  height: 100%;
+  align-items: center;
+
+  .forms__image {
+    border: 1px solid black;
+    border-radius: 20px;
+    margin: 5px 0;
+  }
+
+  .forms__image:hover {
+    cursor: pointer;
+  }
+}
