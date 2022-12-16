@@ -67,14 +67,7 @@ const PokemonView: React.FC = () => {
                   setState([
                     {
                       stateName: 'varietiesData',
-                      value: [
-                        {
-                          name: data.name,
-                          image:
-                            data.sprites.other['official-artwork']
-                              .front_default
-                        }
-                      ]
+                      value: [data]
                     }
                   ])
                 );
