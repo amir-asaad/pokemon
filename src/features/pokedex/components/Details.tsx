@@ -1,13 +1,18 @@
 import { Box, Typography } from '@mui/material';
-import React, { memo } from 'react';
-import { useAppSelector } from '../../../hooks';
+import React, { memo, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { capitalize } from '../../../utils/helpers';
+import TypesOrWeakness from './TypesOrWeakness';
+
+import { fetchPokemonWeaknessData } from '../store/pokemonSlice';
 
 const Details: React.FC = () => {
   const {
     height: pokemonHeight,
     weight: pokemonWeight,
-    abilities
+    abilities,
+    types,
+    weakness
   } = useAppSelector((state) => state.pokemon.viewPokemon);
   const pokemonSpecies = useAppSelector(
     (state) => state.pokemon.pokemonSpecies
@@ -42,29 +47,34 @@ const Details: React.FC = () => {
           {pokemonSpecies.flavor_text_entries[0]?.flavor_text}
         </Typography>
       </Box>
-      <Box className="flex-grow-1">
-        <Typography className="bold--text">Height</Typography>
-        <Typography
-          sx={{
-            fontSize: {
-              sm: '1.2rem'
-            }
-          }}
-        >
-          {height} cm
-        </Typography>
-      </Box>
-      <Box className="flex-grow-1">
-        <Typography className="bold--text">Weight</Typography>
-        <Typography
-          sx={{
-            fontSize: {
-              sm: '1.2rem'
-            }
-          }}
-        >
-          {weight} kg
-        </Typography>
+      <Box
+        className="flex-grow-1"
+        sx={{ display: 'flex', flexWrap: 'wrap' }}
+      >
+        <Box className="flex-grow-1">
+          <Typography className="bold--text">Height</Typography>
+          <Typography
+            sx={{
+              fontSize: {
+                sm: '1.2rem'
+              }
+            }}
+          >
+            {height} cm
+          </Typography>
+        </Box>
+        <Box className="flex-grow-1">
+          <Typography className="bold--text">Weight</Typography>
+          <Typography
+            sx={{
+              fontSize: {
+                sm: '1.2rem'
+              }
+            }}
+          >
+            {weight} kg
+          </Typography>
+        </Box>
       </Box>
       <Box className="flex-grow-1">
         <Typography className="bold--text">Abilities</Typography>
@@ -78,6 +88,14 @@ const Details: React.FC = () => {
           {mapAbilities()}
         </Typography>
       </Box>
+      <TypesOrWeakness
+        text="Types"
+        values={types}
+      />
+      <TypesOrWeakness
+        text="Weakness"
+        values={weakness}
+      />
     </Box>
   );
 };

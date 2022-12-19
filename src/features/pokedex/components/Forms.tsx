@@ -1,16 +1,23 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { PokemonDataInterface, setState } from '../store/pokemonSlice';
+import {
+  fetchPokemonWeaknessData,
+  PokemonDataInterface,
+  setState
+} from '../store/pokemonSlice';
 
 const Forms: React.FC = () => {
   const dispatch = useAppDispatch();
-  const varietiesData = useAppSelector(
-    (state) => state.pokemon.varietiesData
+  const { varietiesData, viewPokemon } = useAppSelector(
+    (state) => state.pokemon
   );
 
   const onViewPokemon = (pokemon: PokemonDataInterface) => {
-    dispatch(setState([{ stateName: 'viewPokemon', value: pokemon }]));
+    if (viewPokemon.name !== pokemon.name) {
+      dispatch(setState([{ stateName: 'viewPokemon', value: pokemon }]));
+      dispatch(fetchPokemonWeaknessData());
+    }
   };
 
   const displayImage = (

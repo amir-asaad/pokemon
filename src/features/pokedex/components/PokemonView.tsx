@@ -15,6 +15,7 @@ import '../styles/PokemonView.css';
 import PokemonEvolution from './PokemonEvolution';
 
 import {
+  fetchPokemonWeaknessData,
   fetchSpecies,
   fetchVarieties,
   viewPokemonData
@@ -24,7 +25,7 @@ import { RESET_VIEW_POKEMON, setState } from '../store/pokemonSlice';
 
 import Details from './Details';
 import Forms from './Forms';
-import Weakness from './Weakness';
+import TypesAndWeakness from './TypesOrWeakness';
 import Stats from './Stats';
 import Evolution from './Evolution';
 import NameAndImage from './NameAndImage';
@@ -32,7 +33,7 @@ import NameAndImage from './NameAndImage';
 const PokemonView: React.FC = () => {
   const [activeDisplay, setActiveDisplay] = useState(0);
 
-  const buttons = ['Details', 'Forms', 'Weakness', 'Stats', 'Evolution'];
+  const buttons = ['Details', 'Forms', 'Stats', 'Evolution'];
 
   const dispatch = useAppDispatch();
   const { viewPokemon, evolution } = useAppSelector(
@@ -55,6 +56,7 @@ const PokemonView: React.FC = () => {
       dispatch(viewPokemonData(id))
         .unwrap()
         .then((data) => {
+          dispatch(fetchPokemonWeaknessData());
           dispatch(fetchSpecies())
             .unwrap()
             .then((speciesData) => {
@@ -90,18 +92,14 @@ const PokemonView: React.FC = () => {
   };
 
   const showActiveDisplay = () => {
-    console.log('go here', activeDisplay);
-
     switch (activeDisplay) {
       case 0:
         return <Details />;
       case 1:
         return <Forms />;
       case 2:
-        return <Weakness />;
-      case 3:
         return <Stats />;
-      case 4:
+      case 3:
         return <Evolution />;
       default:
         return <Details />;

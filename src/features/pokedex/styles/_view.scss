@@ -1,4 +1,8 @@
 .view {
+  .view__card {
+    overflow-x: auto;
+  }
+
   .view__button--active {
     font-size: 1.2rem;
     font-weight: bold;

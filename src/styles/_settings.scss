@@ -6,6 +6,14 @@
   flex-grow: 1 !important;
 }
 
+.d-flex {
+  display: flex;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
 .bug--background {
   background-color: rgb(168, 184, 32, 0.2) !important;
 }
