@@ -12,8 +12,6 @@ import { useParams } from 'react-router-dom';
 
 import '../styles/PokemonView.css';
 
-import PokemonEvolution from './PokemonEvolution';
-
 import {
   fetchEvolutionChain,
   fetchEvolutionDetails,
@@ -22,12 +20,10 @@ import {
   fetchVarieties,
   viewPokemonData
 } from '../store/pokemonSlice';
-import EeveeEvolution from './EeveeEvolution';
 import { RESET_VIEW_POKEMON, setState } from '../store/pokemonSlice';
 
 import Details from './Details';
 import Forms from './Forms';
-import TypesAndWeakness from './TypesOrWeakness';
 import Stats from './Stats';
 import Evolution from './Evolution';
 import NameAndImage from './NameAndImage';
@@ -42,9 +38,7 @@ const PokemonView: React.FC = () => {
   const buttons = ['Details', 'Forms', 'Stats', 'Evolution'];
 
   const dispatch = useAppDispatch();
-  const { viewPokemon, evolution } = useAppSelector(
-    (state) => state.pokemon
-  );
+  const { viewPokemon } = useAppSelector((state) => state.pokemon);
   const params = useParams();
 
   const arrangeEvolution = useCallback(

@@ -1,10 +1,8 @@
 import { Box, Typography } from '@mui/material';
-import React, { memo, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
+import React, { memo } from 'react';
+import { useAppSelector } from '../../../hooks';
 import { capitalize } from '../../../utils/helpers';
 import TypesOrWeakness from './TypesOrWeakness';
-
-import { fetchPokemonWeaknessData } from '../store/pokemonSlice';
 
 const Details: React.FC = () => {
   const {
