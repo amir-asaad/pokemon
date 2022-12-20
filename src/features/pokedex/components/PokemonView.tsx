@@ -10,8 +10,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useParams } from 'react-router-dom';
 
-import '../styles/PokemonView.css';
-
 import {
   fetchEvolutionChain,
   fetchEvolutionDetails,
@@ -31,7 +29,6 @@ import {
   EvolutionChainI,
   EvolutionI
 } from '../interface/evolution.interface';
-import EeveeEvolution from './EeveeEvolution';
 import EvolutionEevee from './EvolutionEevee';
 
 const PokemonView: React.FC = () => {

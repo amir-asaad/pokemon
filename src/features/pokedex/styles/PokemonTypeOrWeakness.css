@@ -1,6 +1,0 @@
-.pokemon-type,
-.pokemon-weakness {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}

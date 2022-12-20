@@ -1,10 +1,8 @@
-import { Box, capitalize, Grid, Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '../../../hooks';
-import { addZeroes } from '../../../utils/helpers';
 import { ArrangedEvolutionT } from '../interface/evolution.interface';
 import EvolutionDisplayPokemon from './EvolutionDisplayPokemon';
-import TypesOrWeakness from './TypesOrWeakness';
 
 const Evolution: React.FC = () => {
   const { arrangedEvolution } = useAppSelector((state) => state.pokemon);
