@@ -190,6 +190,10 @@ const PokemonView: React.FC = () => {
             <List
               sx={{
                 display: 'flex',
+                flexDirection: {
+                  xs: 'column',
+                  sm: 'row'
+                },
                 alignItems: 'center',
                 flexWrap: 'wrap'
               }}
@@ -202,7 +206,12 @@ const PokemonView: React.FC = () => {
                     }}
                     key={`button-${buttonIndex}`}
                     selected={activeDisplay === buttonIndex}
-                    sx={{ justifyContent: 'center' }}
+                    sx={{
+                      justifyContent: 'center',
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                      fontSize: {}
+                    }}
                     onClick={() => {
                       onDisplay(buttonIndex);
                     }}

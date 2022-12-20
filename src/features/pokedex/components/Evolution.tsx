@@ -14,6 +14,7 @@ const Evolution: React.FC = () => {
       <Grid
         className="evolution__inner-container"
         container
+        spacing={3}
         flexWrap="nowrap"
         sx={{
           flexDirection: {
@@ -54,10 +55,10 @@ const Evolution: React.FC = () => {
 
   return (
     <Box className="evolution">
-      <Typography paddingBottom={3}>Evolution</Typography>
       <Grid
         className="evolution__outer-container"
         container
+        spacing={3}
         sx={{
           flexDirection: {
             xs: 'column',
