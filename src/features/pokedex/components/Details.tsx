@@ -91,10 +91,12 @@ const Details: React.FC = () => {
       <TypesOrWeakness
         text="Types"
         values={types}
+        showLabel
       />
       <TypesOrWeakness
         text="Weakness"
         values={weakness}
+        showLabel
       />
     </Box>
   );

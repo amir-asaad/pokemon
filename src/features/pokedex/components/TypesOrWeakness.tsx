@@ -35,7 +35,7 @@ const TypesOrWeakness: React.FC<TypesOrWeaknessProps> = (props) => {
         <Typography fontWeight="bold">{props.text}</Typography>
       )}
       <Box
-        className={`d-flex gap-10 ${
+        className={`d-flex gap-10 flex-wrap ${
           props.centerList ? 'justify-center' : ''
         }`}
       >

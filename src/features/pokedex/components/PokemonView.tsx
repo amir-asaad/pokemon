@@ -218,7 +218,14 @@ const PokemonView: React.FC = () => {
                 );
               })}
             </List>
-            <Box sx={{ flexGrow: 1 }}>{showActiveDisplay()}</Box>
+            <Box
+              sx={{
+                flexGrow: 1,
+                width: '100%'
+              }}
+            >
+              {showActiveDisplay()}
+            </Box>
           </Grid>
         </Grid>
       </Card>

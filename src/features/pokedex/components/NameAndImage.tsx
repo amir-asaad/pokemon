@@ -36,7 +36,7 @@ const DisplayImage: React.FC = () => {
         alt={`${pokemon.name} image`}
         sx={{
           maxWidth: {
-            xs: '100%',
+            xs: '100px',
             sm: '200px',
             md: '350px'
           }
