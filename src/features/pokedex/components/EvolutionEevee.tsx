@@ -11,8 +11,6 @@ const EvolutionEevee: React.FC = () => {
   arrangedGrid.splice(5, 0, arrangedGrid[0]);
   arrangedGrid.shift();
 
-  console.log(arrangedEvolution);
-
   return (
     <Grid
       className="evolution"
