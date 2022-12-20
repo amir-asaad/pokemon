@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter,
+  HashRouter,
+  Route,
+  Routes
+} from 'react-router-dom';
 import PokemonView from './features/pokedex/components/PokemonView';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
@@ -27,7 +32,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <HashRouter>
       <ThemeProvider theme={theme}>
         <Routes>
           <Route
@@ -40,6 +45,6 @@ root.render(
           />
         </Routes>
       </ThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   </Provider>
 );
