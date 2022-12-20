@@ -6,6 +6,8 @@ import { PokemonTypesInterface } from '../store/pokemonSlice';
 interface TypesOrWeaknessProps {
   text: 'Types' | 'Weakness';
   values: PokemonTypesInterface[] | DamageRelationsDataI[];
+  showLabel?: boolean;
+  centerList?: boolean;
 }
 
 const TypesOrWeakness: React.FC<TypesOrWeaknessProps> = (props) => {
@@ -29,8 +31,16 @@ const TypesOrWeakness: React.FC<TypesOrWeaknessProps> = (props) => {
       className="types"
       height="100%"
     >
-      <Typography fontWeight="bold">{props.text}</Typography>
-      <Box className="d-flex gap-10">{displayTypeOrWeakness()}</Box>
+      {props.showLabel && (
+        <Typography fontWeight="bold">{props.text}</Typography>
+      )}
+      <Box
+        className={`d-flex gap-10 ${
+          props.centerList ? 'justify-center' : ''
+        }`}
+      >
+        {displayTypeOrWeakness()}
+      </Box>
     </Box>
   );
 };

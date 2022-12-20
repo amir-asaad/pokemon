@@ -6,7 +6,7 @@ import {
   List,
   ListItemButton
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useParams } from 'react-router-dom';
 
@@ -15,6 +15,8 @@ import '../styles/PokemonView.css';
 import PokemonEvolution from './PokemonEvolution';
 
 import {
+  fetchEvolutionChain,
+  fetchEvolutionDetails,
   fetchPokemonWeaknessData,
   fetchSpecies,
   fetchVarieties,
@@ -29,6 +31,10 @@ import TypesAndWeakness from './TypesOrWeakness';
 import Stats from './Stats';
 import Evolution from './Evolution';
 import NameAndImage from './NameAndImage';
+import {
+  EvolutionChainI,
+  EvolutionI
+} from '../interface/evolution.interface';
 
 const PokemonView: React.FC = () => {
   const [activeDisplay, setActiveDisplay] = useState(0);
@@ -40,6 +46,49 @@ const PokemonView: React.FC = () => {
     (state) => state.pokemon
   );
   const params = useParams();
+
+  const arrangeEvolution = useCallback(
+    (data: EvolutionI) => {
+      const evolution: [number, string][][] = [];
+      evolution.push([[0, data.chain.species.name]]);
+
+      const recursionFunc = (
+        evolvesTo: EvolutionChainI[],
+        evolutionIndex: number,
+        innerEvolutionIndex: number
+      ) => {
+        let currentIndex = innerEvolutionIndex;
+
+        for (let i = 0; i < evolvesTo.length; i++) {
+          const innerEvolveTo = evolvesTo[`${i}`];
+          const innerEvolution: [number, string] = [
+            currentIndex,
+            innerEvolveTo.species.name
+          ];
+
+          if (evolution[`${evolutionIndex}`]) {
+            evolution[`${evolutionIndex}`].push(innerEvolution);
+          } else {
+            evolution[`${evolutionIndex}`] = [innerEvolution];
+          }
+
+          if (innerEvolveTo.evolves_to.length > 0) {
+            recursionFunc(
+              innerEvolveTo.evolves_to,
+              evolutionIndex + 1,
+              currentIndex
+            );
+
+            currentIndex++;
+          }
+        }
+      };
+
+      recursionFunc(data.chain.evolves_to, 1, 0);
+      dispatch(fetchEvolutionDetails(evolution));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     return function () {
@@ -74,10 +123,16 @@ const PokemonView: React.FC = () => {
                   ])
                 );
               }
+
+              dispatch(fetchEvolutionChain())
+                .unwrap()
+                .then((evolutionData) => {
+                  arrangeEvolution(evolutionData);
+                });
             });
         });
     }
-  }, [dispatch, viewPokemon, params]);
+  }, [dispatch, viewPokemon, params, arrangeEvolution]);
 
   // const displayEvolution = () => {
   //   return evolution.chain.species.name === 'eevee' ? (
@@ -117,7 +172,6 @@ const PokemonView: React.FC = () => {
           container
           sx={{
             flexDirection: { xs: 'column', lg: 'row' },
-            border: '1px solid pink',
             padding: 3
           }}
           minHeight="300px"

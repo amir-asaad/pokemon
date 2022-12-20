@@ -1,0 +1,34 @@
+.evolution {
+  height: 100%;
+
+  .evolution__outer-container {
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    // height: 90%;
+    gap: 20px;
+    align-content: center;
+  }
+
+  .evolution__inner-container {
+    height: 100%;
+    justify-content: space-around;
+    gap: 10px;
+  }
+
+  .evolution__image {
+    object-fit: contain;
+    display: block;
+    margin: auto;
+    border-radius: 50%;
+    border: 5px solid rgb(195, 194, 194);
+  }
+
+  .evolution__name {
+    overflow-wrap: break-word;
+    font-weight: bold;
+  }
+
+  .evolution__id {
+    overflow-wrap: break-word;
+  }
+}
