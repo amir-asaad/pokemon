@@ -19,7 +19,3 @@ export type ArrangedEvolutionT = [
   string,
   PokemonDataInterface | undefined
 ];
-
-// export interface ArrangedEvolutionI {
-//   chain: [number, string, PokemonDataInterface | undefined][];
-// }

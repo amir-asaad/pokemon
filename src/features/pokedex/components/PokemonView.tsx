@@ -31,6 +31,8 @@ import {
   EvolutionChainI,
   EvolutionI
 } from '../interface/evolution.interface';
+import EeveeEvolution from './EeveeEvolution';
+import EvolutionEevee from './EvolutionEevee';
 
 const PokemonView: React.FC = () => {
   const [activeDisplay, setActiveDisplay] = useState(0);
@@ -128,14 +130,6 @@ const PokemonView: React.FC = () => {
     }
   }, [dispatch, viewPokemon, params, arrangeEvolution]);
 
-  // const displayEvolution = () => {
-  //   return evolution.chain.species.name === 'eevee' ? (
-  //     <EeveeEvolution />
-  //   ) : (
-  //     <PokemonEvolution />
-  //   );
-  // };
-
   const onDisplay = (buttonIndex: number) => {
     setActiveDisplay(buttonIndex);
   };
@@ -149,7 +143,13 @@ const PokemonView: React.FC = () => {
       case 2:
         return <Stats />;
       case 3:
-        return <Evolution />;
+        const eevees = [133, 134, 135, 136, 196, 197, 470, 471, 700];
+
+        return eevees.includes(viewPokemon.id) ? (
+          <EvolutionEevee />
+        ) : (
+          <Evolution />
+        );
       default:
         return <Details />;
     }
