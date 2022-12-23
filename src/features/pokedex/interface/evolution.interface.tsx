@@ -1,4 +1,4 @@
-import { PokemonDataInterface } from '../store/pokemonSlice';
+import { PokemonDataInterface } from './store.interface';
 
 export interface EvolutionI {
   chain: EvolutionChainI;

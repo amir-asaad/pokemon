@@ -1,5 +1,3 @@
-import { PokemonDataInterface } from '../store/pokemonSlice';
-
 export interface PokemonSpeciesI {
   evolution_chain: {
     url: string;

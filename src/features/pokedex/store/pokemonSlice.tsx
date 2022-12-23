@@ -1,91 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 import { capitalize } from '../../../utils/helpers';
-import {
-  DamageRelationsDataI,
-  TypeDataI
-} from '../interface/type.interface';
+import { TypeDataI } from '../interface/type.interface';
 
-import { EvolutionI, SpeciesI } from '../interface/evolution.interface';
+import { EvolutionI } from '../interface/evolution.interface';
 import { PokemonSpeciesI } from '../interface/species.interface';
-
-interface PokemonResultInterface {
-  name: string;
-  url: string;
-}
-
-export interface TypeNameI {
-  name: string;
-  url: string;
-}
-
-export interface PokemonTypesInterface {
-  slot: number;
-  type: TypeNameI;
-}
-
-interface FrontDefaultInterface {
-  front_default: string;
-}
-interface OfficialArtworkInterface {
-  'official-artwork': FrontDefaultInterface;
-}
-
-interface OtherSpritesInterface {
-  other: OfficialArtworkInterface;
-}
-
-interface StatNameI {
-  name: string;
-}
-
-export interface PokemonStatsI {
-  base_stat: number;
-  stat: StatNameI;
-}
-
-interface PokemonAbilityNameI {
-  name: string;
-  url: string;
-}
-
-interface PokemonAbilityI {
-  ability: PokemonAbilityNameI;
-  is_hidden: boolean;
-}
-
-export interface PokemonDataInterface {
-  name: string;
-  id: number;
-  order: number;
-  sprites: OtherSpritesInterface;
-  artwork: string;
-  types: PokemonTypesInterface[];
-  stats: PokemonStatsI[];
-  height: number;
-  weight: number;
-  abilities: PokemonAbilityI[];
-  weakness: DamageRelationsDataI[];
-  species: SpeciesI;
-}
-
-export interface PokemonStateInterface {
-  next: string;
-  previous: string | null;
-  results: PokemonResultInterface[];
-  resultsData: PokemonDataInterface[];
-  numberToFetch: number[];
-  viewPokemon: PokemonDataInterface;
-  typeData: TypeDataI[];
-  evolution: EvolutionI;
-  arrangedEvolution: [
-    number,
-    string,
-    PokemonDataInterface | undefined
-  ][][];
-  pokemonSpecies: PokemonSpeciesI;
-  varietiesData: PokemonDataInterface[];
-}
+import {
+  PokemonDataInterface,
+  PokemonResultInterface,
+  PokemonStateInterface
+} from '../interface/store.interface';
 
 const initialState: PokemonStateInterface = {
   next: '',

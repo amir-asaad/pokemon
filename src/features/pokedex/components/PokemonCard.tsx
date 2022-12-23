@@ -7,7 +7,7 @@ import {
   Typography
 } from '@mui/material';
 import React, { memo } from 'react';
-import { PokemonTypesInterface } from '../store/pokemonSlice';
+import { PokemonTypesInterface } from '../interface/store.interface';
 import { pokemonTypeColor } from '../../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 interface Props {

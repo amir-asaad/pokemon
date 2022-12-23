@@ -1,11 +1,8 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import {
-  fetchPokemonWeaknessData,
-  PokemonDataInterface,
-  setState
-} from '../store/pokemonSlice';
+import { fetchPokemonWeaknessData, setState } from '../store/pokemonSlice';
+import { PokemonDataInterface } from '../interface/store.interface';
 
 const Forms: React.FC = () => {
   const dispatch = useAppDispatch();

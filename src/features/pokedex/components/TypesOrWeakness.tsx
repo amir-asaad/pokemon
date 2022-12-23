@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { DamageRelationsDataI } from '../interface/type.interface';
-import { PokemonTypesInterface } from '../store/pokemonSlice';
+import { PokemonTypesInterface } from '../interface/store.interface';
 
 interface TypesOrWeaknessProps {
   text: 'Types' | 'Weakness';
