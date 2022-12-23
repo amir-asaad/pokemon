@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { fetchPokemonData, fetchPokemonList } from '../store/pokemonSlice';
-import { Grid } from '@mui/material';
+import { Grid, Skeleton } from '@mui/material';
 
 import '../styles/PokemonList.css';
 
@@ -13,6 +13,7 @@ const PokemonList: React.FC = () => {
   const { resultsData: pokemonData } = useAppSelector(
     (state) => state.pokemon
   );
+  const [isInitialFetching, setIsInitialFetching] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -20,8 +21,12 @@ const PokemonList: React.FC = () => {
       dispatch(fetchPokemonList())
         .unwrap()
         .then((data) => {
-          dispatch(fetchPokemonData(data.results));
+          dispatch(fetchPokemonData(data.results)).then(() => {
+            setIsInitialFetching(false);
+          });
         });
+    } else {
+      setIsInitialFetching(false);
     }
   }, [dispatch, pokemonData]);
 
@@ -58,6 +63,32 @@ const PokemonList: React.FC = () => {
     [isFetching, dispatch]
   );
 
+  const displaySkeletonLoadingCards = () => {
+    const skeletons: JSX.Element[] = [];
+
+    for (let i = 0; i < 30; i++) {
+      skeletons.push(
+        <Grid
+          key={`skeleton-${i}`}
+          item
+          sx={{ mx: 'auto', my: 2 }}
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+        >
+          <Skeleton
+            variant="rectangular"
+            height="150px"
+            width="80%"
+          />
+        </Grid>
+      );
+    }
+
+    return skeletons;
+  };
+
   const pokemonCards = () => {
     return pokemonData.map((val, index) => (
       <Grid
@@ -84,7 +115,11 @@ const PokemonList: React.FC = () => {
 
   return (
     <div>
-      <Grid container>{pokemonCards()}</Grid>
+      <Grid container>
+        {isInitialFetching
+          ? displaySkeletonLoadingCards()
+          : pokemonCards()}
+      </Grid>
       {isFetching && <LoadingBar />}
     </div>
   );
