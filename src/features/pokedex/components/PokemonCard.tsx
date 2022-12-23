@@ -66,7 +66,8 @@ const PokemonCard: React.FC<Props> = ({ name, image, types }) => {
           component="img"
           image={image}
           sx={{
-            mt: 2
+            mt: 2,
+            minHeight: '150px'
           }}
         />
         <Typography

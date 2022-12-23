@@ -1,8 +1,13 @@
 import { Box, Card, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '../../../hooks';
+import SkeletonLoading from '../../../components/SkeletonLoading';
 
-const Stats: React.FC = () => {
+interface Props {
+  isFetchingDetails: boolean;
+}
+
+const Stats: React.FC<Props> = (props) => {
   const { stats, types } = useAppSelector(
     (state) => state.pokemon.viewPokemon
   );
@@ -45,16 +50,34 @@ const Stats: React.FC = () => {
       );
     });
   };
-  return (
-    <Box className="stats">
-      <Grid
-        container
-        flexDirection="column"
-      >
-        {mapStats()}
-      </Grid>
-    </Box>
-  );
+
+  const displayStats = () => {
+    return (
+      <Box className="stats">
+        <Grid
+          container
+          flexDirection="column"
+        >
+          {mapStats()}
+        </Grid>
+      </Box>
+    );
+  };
+
+  const displaySkeletonLoading = () => {
+    return (
+      <Box>
+        <SkeletonLoading
+          numberOfSkeletons={3}
+          shouldDisplayText
+        />
+      </Box>
+    );
+  };
+
+  return props.isFetchingDetails
+    ? displaySkeletonLoading()
+    : displayStats();
 };
 
 export default Stats;

@@ -3,8 +3,13 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { fetchPokemonWeaknessData, setState } from '../store/pokemonSlice';
 import { PokemonDataInterface } from '../interface/store.interface';
+import SkeletonLoading from '../../../components/SkeletonLoading';
 
-const Forms: React.FC = () => {
+interface Props {
+  isFetchingSpecies: boolean;
+}
+
+const Forms: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch();
   const { varietiesData, viewPokemon } = useAppSelector(
     (state) => state.pokemon
@@ -42,12 +47,24 @@ const Forms: React.FC = () => {
     );
   };
 
-  return (
-    <Box className="forms">
-      {varietiesData.map((variety, varietyIndex) =>
-        displayImage(variety, varietyIndex)
-      )}
-    </Box>
+  const displayForms = () => {
+    return (
+      <Box className="forms">
+        {varietiesData.map((variety, varietyIndex) =>
+          displayImage(variety, varietyIndex)
+        )}
+      </Box>
+    );
+  };
+
+  return props.isFetchingSpecies ? (
+    <SkeletonLoading
+      numberOfSkeletons={1}
+      shouldBeRow
+      rectangularHeight="150px"
+    />
+  ) : (
+    displayForms()
   );
 };
 

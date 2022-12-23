@@ -30,6 +30,7 @@ import {
   EvolutionI
 } from '../interface/evolution.interface';
 import EvolutionEevee from './EvolutionEevee';
+import SkeletonLoading from '../../../components/SkeletonLoading';
 
 const PokemonView: React.FC = () => {
   const [activeDisplay, setActiveDisplay] = useState(0);
@@ -39,6 +40,9 @@ const PokemonView: React.FC = () => {
   const dispatch = useAppDispatch();
   const { viewPokemon } = useAppSelector((state) => state.pokemon);
   const params = useParams();
+
+  const [isFetchingDetails, setIsFetchingDetails] = useState(false);
+  const [isFetchingSpecies, setIsFetchingSpecies] = useState(false);
 
   const arrangeEvolution = useCallback(
     (data: EvolutionI) => {
@@ -78,7 +82,9 @@ const PokemonView: React.FC = () => {
       };
 
       recursionFunc(data.chain.evolves_to, 1, 0);
-      dispatch(fetchEvolutionDetails(evolution));
+      dispatch(fetchEvolutionDetails(evolution)).then(() => {
+        setIsFetchingSpecies(false);
+      });
     },
     [dispatch]
   );
@@ -93,15 +99,19 @@ const PokemonView: React.FC = () => {
 
   useEffect(() => {
     if (viewPokemon.id < 1) {
+      setIsFetchingDetails(true);
       const id = params.id ? params.id.toLowerCase() : '';
 
       dispatch(viewPokemonData(id))
         .unwrap()
         .then((data) => {
-          dispatch(fetchPokemonWeaknessData());
+          dispatch(fetchPokemonWeaknessData()).then(() => {
+            setIsFetchingDetails(false);
+          });
           dispatch(fetchSpecies())
             .unwrap()
             .then((speciesData) => {
+              setIsFetchingSpecies(true);
               // No other varieties
               if (speciesData.varieties.length > 1) {
                 dispatch(fetchVarieties());
@@ -134,13 +144,22 @@ const PokemonView: React.FC = () => {
   const showActiveDisplay = () => {
     switch (activeDisplay) {
       case 0:
-        return <Details />;
+        return <Details isFetchingDetails={isFetchingDetails} />;
       case 1:
-        return <Forms />;
+        return <Forms isFetchingSpecies={isFetchingSpecies} />;
       case 2:
-        return <Stats />;
+        return <Stats isFetchingDetails={isFetchingDetails} />;
       case 3:
         const eevees = [133, 134, 135, 136, 196, 197, 470, 471, 700];
+
+        if (isFetchingSpecies) {
+          return (
+            <SkeletonLoading
+              numberOfSkeletons={1}
+              rectangularHeight="150px"
+            />
+          );
+        }
 
         return eevees.includes(viewPokemon.id) ? (
           <EvolutionEevee />
@@ -148,7 +167,7 @@ const PokemonView: React.FC = () => {
           <Evolution />
         );
       default:
-        return <Details />;
+        return <Details isFetchingDetails={isFetchingDetails} />;
     }
   };
 
@@ -173,7 +192,7 @@ const PokemonView: React.FC = () => {
             flexBasis={0}
             flexGrow={1}
           >
-            <NameAndImage />
+            <NameAndImage isFetchingDetails={isFetchingDetails} />
           </Grid>
           <Grid
             item
